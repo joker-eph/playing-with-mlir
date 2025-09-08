@@ -1,0 +1,37 @@
+# MLIR hands-on basic examples
+
+These are intended as single-files minimalistic examples of C++ usage of MLIR
+APIs.
+
+You can compile and run the examples in a docker container with invocations
+such as:
+
+```bash
+# The `./run` script takes the source to compile as argument, followed
+# by the arguments to pass to the executable.
+
+$ ./run  1-ir-traversal/1-ir-traversal.cpp 1-ir-traversal/1-input1.mlir
+
+$ ./run  2-ir-traversal-with-regions/2-ir-traversal-with-regions.cpp 2-ir-traversal-with-regions/2-input1-region.mlir
+
+$ ./run  3-lets-make-it-a-pass/3-lets-make-it-a-pass.cpp 3-lets-make-it-a-pass/3-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass)"
+
+$ ./run  3-lets-make-it-a-pass/3-lets-make-it-a-pass.cpp 3-lets-make-it-a-pass/3-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass) -debug"
+
+$ ./run  4-mutation/4-mutation-solution.cpp 4-mutation/4-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass)"
+
+# Test your solution to problem 4 with FileCheck (careful with the escaping of the pipe operator):
+$ ./run  4-mutation/4-mutation-solution.cpp 4-mutation/4-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass)" \| FileCheck 4-mutation/4-input1.mlir 
+
+```
+
+For exercise 5, you'll need to look at:
+
+- The generated doc for the dialect: https://mlir.llvm.org/docs/Dialects/ArithOps/
+- TableGen source: https://github.com/llvm/llvm-project/blob/eeb43806eb1b40e690aeeba496ee974172202df9/mlir/include/mlir/Dialect/Arith/IR/ArithOps.td#L44-L85
+- The generated C++:
+
+```bash
+$ ./in-docker cat /home/mlir/llvm-project/install/include/mlir/Dialect/Arith/IR/ArithOps.h.inc > ArithOps.h
+$ ./in-docker cat /home/mlir/llvm-project/install/include/mlir/Dialect/Func/IR/FuncOps.h.inc > FuncOps.h
+```

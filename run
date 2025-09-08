@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -lt 2 ]; then
+    echo "Error: Missing test file and input file arguments." >&2
+    echo "e.g.: ./run playing-with-mlir1.cpp input1.mlir" >&2
+    exit 1
+fi
+
+filename="$1"
+input="$2"
+shift 2
+quoted_args=""
+if [ "$#" -gt 0 ]; then
+    quoted_args=$(printf '%q ' "$@")
+    quoted_args=${quoted_args//\\|/|}
+    quoted_args=${quoted_args% }   # remove trailing space
+fi
+
+repo=jokereph
+image="$repo"/mlir-tutorial:debug
+
+LLVM_PREFIX=/home/mlir/llvm-project/install
+
+command="clang++ $filename -fno-exceptions -fno-rtti \
+  -o /tmp/playing-with-mlir \
+  -I $LLVM_PREFIX/include -L$LLVM_PREFIX/lib \
+  -lMLIR -lLLVM -Wl,-rpath=$LLVM_PREFIX/lib && \
+  echo 'Compiled successfully! Running now...' && echo && \
+  /tmp/playing-with-mlir $input $quoted_args"
+
+# Print with in a way that can be copy/paster into a terminal (escaped for quotes, parentheses, etc.)
+echo -n "Running in docker: $command "
+echo
+echo
+echo docker run --rm -it -v "$PWD:/tmp/tutorial" -w "/tmp/tutorial" "$image" bash -c \
+  \"$command\"
+echo
+exec docker run --rm -it -v "$PWD:/tmp/tutorial" -w "/tmp/tutorial" "$image" bash -c \
+  "$command"
