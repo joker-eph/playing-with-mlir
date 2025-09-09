@@ -16,7 +16,7 @@ $ ./run  2-ir-traversal-with-regions/2-ir-traversal-with-regions.cpp 2-ir-traver
 
 $ ./run  3-lets-make-it-a-pass/3-lets-make-it-a-pass.cpp 3-lets-make-it-a-pass/3-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass)"
 
-$ ./run  3-lets-make-it-a-pass/3-lets-make-it-a-pass.cpp 3-lets-make-it-a-pass/3-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass) -debug"
+$ ./run  3-lets-make-it-a-pass/3-lets-make-it-a-pass.cpp 3-lets-make-it-a-pass/3-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass)" -debug
 
 $ ./run  4-mutation/4-mutation-solution.cpp 4-mutation/4-input1.mlir -allow-unregistered-dialect   --pass-pipeline="builtin.module(my-pass)"
 
